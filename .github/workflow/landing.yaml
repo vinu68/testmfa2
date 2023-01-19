@@ -1,0 +1,45 @@
+# 
+# GitHub Actions workflow.
+#
+# Automatically deploys the "worker" microservice on push.
+#
+
+name: Deploy Landing app
+
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - 'landing/**'
+  workflow_dispatch:
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      
+      # Checks-out your repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+
+      #
+      # Installs Node.js (for figit).
+      #
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 18
+
+      #
+      # Installs node packages.
+      #
+      - name: Install dependencies
+        run: npm install
+
+      #
+      # Do build
+      #
+      - name: Create Build
+        run: npm run build
